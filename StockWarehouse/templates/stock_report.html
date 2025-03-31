@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Stock Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        .table th, .table td {
+            border: 1px solid black;
+            padding: 5px;
+            vertical-align: top;
+            overflow-wrap: break-word;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-left {
+            text-align: left;
+        }
+
+        .balance-row {
+            background-color: #f8f9fa;
+        }
+
+
+        .col-qty {
+            width: 8%;
+        }
+
+        .col-price {
+            width: 10%;
+        }
+
+        .col-total {
+            width: 12%;
+        }
+
+        .col-number {
+            width: 5%;
+        }
+
+        .col-date {
+            width: 5%;
+        }
+
+        .col-desc {
+            width: 10%;
+        }
+
+        .col-code {
+            width: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Stock Report</h2>
+        <p>Items code: {{ item_code }}</p>
+        <p>Name: {{ name }}</p>
+        <p>Unit: {{ unit }}</p>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="col-number">No</th>
+                    <th rowspan="2" class="col-date">Date</th>
+                    <th rowspan="2" class="col-desc">Description</th>
+                    <th rowspan="2" class="col-code">Code</th>
+                    <th colspan="3" class="text-center">In</th>
+                    <th colspan="3" class="text-center">Out</th>
+                    <th colspan="3" class="text-center">Stock</th>
+                </tr>
+                <tr>
+                    <th class="text-center col-qty">qty</th>
+                    <th class="text-center col-price">price</th>
+                    <th class="text-center col-total">total</th>
+                    <th class="text-center col-qty">qty</th>
+                    <th class="text-center col-price">price</th>
+                    <th class="text-center col-total">total</th>
+                    <th class="text-center col-qty">qty</th>
+                    <th class="text-center col-price">price</th>
+                    <th class="text-center col-total">total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    {% if forloop.first %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.date|date:"d-m-Y" }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.code }}</td>
+                        <td>{{ item.in_qty }}</td>
+                        <td>{{ item.in_price }}</td>
+                        <td>{{ item.in_total }}</td>
+                        <td>{{ item.out_qty|default:"0" }}</td>
+                        <td>{{ item.out_price|default:"0" }}</td>
+                        <td>{{ item.out_total|default:"0" }}</td>
+                        <td>{{ item.stock_qty.0 }}</td>
+                        <td>{{ item.stock_price.0 }}</td>
+                        <td>{{ item.stock_total.0 }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td rowspan="2">{{ forloop.counter }}</td>
+                        <td rowspan="2">{{ item.date|date:"d-m-Y" }}</td>
+                        <td rowspan="2">{{ item.description }}</td>
+                        <td rowspan="2">{{ item.code }}</td>
+                        <td rowspan="2">{{ item.in_qty|default:"0" }}</td>
+                        <td rowspan="2">{{ item.in_price|default:"0" }}</td>
+                        <td rowspan="2">{{ item.in_total|default:"0" }}</td>
+                        <td rowspan="2">{{ item.out_qty|default:"0" }}</td>
+                        <td rowspan="2">{{ item.out_price|default:"0" }}</td>
+                        <td rowspan="2">{{ item.out_total|default:"0" }}</td>
+                        <td>{{ item.stock_qty.0 }}</td>
+                        <td>{{ item.stock_price.0 }}</td>
+                        <td>{{ item.stock_total.0 }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ item.stock_qty.1 }}</td>
+                        <td>{{ item.stock_price.1 }}</td>
+                        <td>{{ item.stock_total.1 }}</td>
+                    </tr>
+                    {% endif %}
+                    
+                    <tr class="balance-row">
+                        <td colspan="4" class="text-left">Balance</td>
+                        <td colspan="6"></td>
+                        <td class="text-left">{{ item.balance_qty }}</td>
+                        <td colspan="2" class="text-left">{{ item.balance_total }}</td>
+                    </tr>
+                {% endfor %}
+                
+                <tr class="summary-row">
+                    <td colspan="4" class="text-left">Summary</td>
+                    <td colspan="3" class="text-left">{{ summary.total_in }}</td>
+                    <td colspan="3" class="text-left">{{ summary.total_out }}</td>
+                    <td class="text-left">{{ summary.stock }}</td>
+                    <td colspan="2" class="text-left">{{ summary.balance }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
