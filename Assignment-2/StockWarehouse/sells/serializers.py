@@ -6,7 +6,7 @@ from .models import SellHeader, SellDetail
 class SellHeaderBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = SellHeader
-        fields = "__all__"
+        exclude = ["is_deleted"]
         read_only_fields = ["created_at", "updated_at", "is_deleted"]
 
 
@@ -14,7 +14,7 @@ class SellHeaderBaseSerializer(serializers.ModelSerializer):
 class SellHeaderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SellHeader
-        fields = ["date", "description", "updated_at"]
+        exclude = ["is_deleted", "created_at", "code", "date"]
         read_only_fields = ["created_at", "updated_at", "is_deleted"]
 
 
@@ -22,7 +22,7 @@ class SellHeaderUpdateSerializer(serializers.ModelSerializer):
 class SellDetailBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = SellDetail
-        fields = "__all__"
+        exclude = ['is_deleted']
         extra_kwargs = {
             "header_code": {"read_only": True},
         }

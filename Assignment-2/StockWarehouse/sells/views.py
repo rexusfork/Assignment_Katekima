@@ -106,7 +106,7 @@ class SellDetailView(APIView):
             )
 
             # DTO: Sell Detail ke Sell Detail Base
-            serializer = SellHeaderBaseSerializer(sell_detail, many=True)
+            serializer = SellDetailBaseSerializer(sell_detail, many=True)
             return Response(status=status.HTTP_200_OK, data=serializer.data)
 
         # Jika Tidak ada Sell Detail
@@ -120,7 +120,7 @@ class SellDetailView(APIView):
     def post(self, request, header_code):
         try:
             # Cek Header Code
-            sell_header = SellHeader.objects.get(code=header_code, is_deleted=False)
+            sell_header = SellHeader.objects.get(header_code=header_code, is_deleted=False)
 
             # DTO: Request ke Purchase
             serializer = SellDetailBaseSerializer(data=request.data)

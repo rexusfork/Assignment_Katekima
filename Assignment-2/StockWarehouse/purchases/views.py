@@ -112,7 +112,7 @@ class PurchaseDetailView(APIView):
         try:
             # Mengambil Semua Purchase berdasarkan header_code dan belum pernah dihapus
             purchase_detail = PurchaseDetail.objects.filter(
-                code=header_code, is_deleted=False
+                header_code=header_code, is_deleted=False
             )
 
             # DTO: Purchase Detail ke Purchase Detail Base

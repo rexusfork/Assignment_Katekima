@@ -2,16 +2,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Item
-from .serializers import ItemBaseSerializer, UpdateItemSerializer, GetListItemSerializer
+from .serializers import ItemBaseSerializer, UpdateItemSerializer
 
 ITEM_NOT_FOUND_MESSAGE = "Item not found"
 
 
 # Create your views here.
 class ItemGetEditDeleteView(APIView):
-    serializer_base_class = ItemBaseSerializer
-    serializer_update_class = UpdateItemSerializer
-
     # Logika: Mengambil Item berdasarkan code
     def get(self, request, code):
         try:
@@ -35,7 +32,7 @@ class ItemGetEditDeleteView(APIView):
             item = Item.objects.get(code=code, is_deleted=False)
 
             # DTO: request ke Item (Khusus bagian yang diubah saja)
-            serializer = self.serializer_update_class(item, data=request.data)
+            serializer = UpdateItemSerializer(item, data=request.data)
 
             if serializer.is_valid():
                 # Menyimpan perubahan kedalam database
@@ -70,9 +67,6 @@ class ItemGetEditDeleteView(APIView):
 
 
 class ItemListCreateView(APIView):
-    # DTO untuk Base
-    serializer_base_class = ItemBaseSerializer
-
     # Logika: Mengambil Semua Item
     def get(self, request):
         # Mengambil semua Item yang belum pernah dihapus
@@ -86,13 +80,13 @@ class ItemListCreateView(APIView):
             )
 
         # DTO: Item ke GetListItem Response
-        serializazer = GetListItemSerializer(items, many=True)
+        serializazer = ItemBaseSerializer(items, many=True)
         return Response(status=status.HTTP_200_OK, data=serializazer.data)
 
     # Logika: Membuat Item baru
     def post(self, request):
         # DTO: Request ke ItemBase
-        serializer = self.serializer_base_class(data=request.data)
+        serializer = ItemBaseSerializer(data=request.data)
 
         if serializer.is_valid():
             # Menyimpan Data dari Request
