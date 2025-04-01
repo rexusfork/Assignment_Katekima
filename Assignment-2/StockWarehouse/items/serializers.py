@@ -9,9 +9,10 @@ class ItemBaseSerializer(serializers.ModelSerializer):
         exclude = ["is_deleted"]
         read_only_fields = ["created_at", "updated_at", "is_deleted"]
 
+
 # DTO: Update Item
 class UpdateItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        exclude =  ["created_at", "is_deleted", "code"]
+        exclude = ["created_at", "is_deleted", "code"]
         read_only_fields = ["created_at", "updated_at", "is_deleted"]

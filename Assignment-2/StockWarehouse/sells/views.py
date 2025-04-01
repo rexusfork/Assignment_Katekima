@@ -120,7 +120,9 @@ class SellDetailView(APIView):
     def post(self, request, header_code):
         try:
             # Cek Header Code
-            sell_header = SellHeader.objects.get(header_code=header_code, is_deleted=False)
+            sell_header = SellHeader.objects.get(
+                header_code=header_code, is_deleted=False
+            )
 
             # DTO: Request ke Purchase
             serializer = SellDetailBaseSerializer(data=request.data)

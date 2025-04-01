@@ -22,7 +22,7 @@ class SellHeaderUpdateSerializer(serializers.ModelSerializer):
 class SellDetailBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = SellDetail
-        exclude = ['is_deleted']
+        exclude = ["is_deleted"]
         extra_kwargs = {
             "header_code": {"read_only": True},
         }
